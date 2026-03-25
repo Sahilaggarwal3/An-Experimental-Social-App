@@ -11,25 +11,14 @@ interface ModalProps {
   footer?: React.ReactElement;
   actionLabel: string;
   disabled?: boolean;
-  onKeyUp?: (event: any) => void;
 }
 
-const Modal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  title,
-  body,
-  actionLabel,
-  footer,
-  disabled,
-  onKeyUp,
-}) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, title, body, actionLabel, footer, disabled }) => {
   const handleClose = useCallback(() => {
     if (disabled) {
       return;
     }
-
+  
     onClose();
   }, [onClose, disabled]);
 
@@ -41,20 +30,6 @@ const Modal: React.FC<ModalProps> = ({
     onSubmit();
   }, [onSubmit, disabled]);
 
-  const handleKeyUp = useCallback(
-    (event: any) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        handleSubmit();
-      }
-
-      if (onKeyUp) {
-        onKeyUp(event);
-      }
-    },
-    [handleSubmit, onKeyUp]
-  );
-
   if (!isOpen) {
     return null;
   }
@@ -62,7 +37,6 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <>
       <div
-        onKeyUp={handleKeyUp}
         className="
           justify-center 
           items-center 
@@ -80,8 +54,7 @@ const Modal: React.FC<ModalProps> = ({
       >
         <div className="relative w-full lg:w-3/6 my-6 mx-auto lg:max-w-3xl h-full lg:h-auto">
           {/*content*/}
-          <div
-            className="
+          <div className="
             h-full
             lg:h-auto
             border-0 
@@ -97,8 +70,7 @@ const Modal: React.FC<ModalProps> = ({
             "
           >
             {/*header*/}
-            <div
-              className="
+            <div className="
               flex 
               items-center 
               justify-between 
@@ -106,7 +78,9 @@ const Modal: React.FC<ModalProps> = ({
               rounded-t
               "
             >
-              <h3 className="text-3xl font-semibold text-white">{title}</h3>
+              <h3 className="text-3xl font-semibold text-white">
+                {title}
+              </h3>
               <button
                 className="
                   p-1 
@@ -122,17 +96,12 @@ const Modal: React.FC<ModalProps> = ({
               </button>
             </div>
             {/*body*/}
-            <div className="relative p-10 flex-auto">{body}</div>
+            <div className="relative p-10 flex-auto">
+              {body}
+            </div>
             {/*footer*/}
             <div className="flex flex-col gap-2 p-10">
-              <Button
-                disabled={disabled}
-                label={actionLabel}
-                secondary
-                fullWidth
-                large
-                onClick={handleSubmit}
-              />
+              <Button disabled={disabled} label={actionLabel} secondary fullWidth large onClick={handleSubmit} />
               {footer}
             </div>
           </div>
@@ -140,6 +109,6 @@ const Modal: React.FC<ModalProps> = ({
       </div>
     </>
   );
-};
+}
 
 export default Modal;

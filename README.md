@@ -1,40 +1,113 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+🚀 FullStack Experimental Social App like Twitter
 
-## Getting Started
+A modern full-stack social app clone built with Next.js, React, TailwindCSS, Prisma, and MongoDB.
+This project demonstrates real-world features like authentication, social interactions, and scalable backend architecture.
 
-First, run the development server:
+📸 Preview
 
-```bash
+🛠️ Tech Stack
+Frontend: Next.js, React, TailwindCSS
+Backend: Next.js API Routes
+Database: MongoDB + Prisma ORM
+Authentication: NextAuth (Credentials-based)
+Security: bcrypt password hashing
+✨ Features
+🔐 Authentication system (Login / Register)
+🧑 User profiles
+📝 Create, delete posts
+❤️ Like / Unlike posts
+💬 Comment / Reply system
+🔔 Notifications
+👥 Follow / Unfollow users
+📱 Fully responsive UI
+🖼️ Image upload (Base64)
+⚙️ Prerequisites
+
+⚠️ Updated requirements (important)
+
+Node.js ≥ 20.19
+npm or yarn
+MongoDB database (local or Atlas)
+📦 Installation
+
+1. Clone the repository
+   git clone https://github.com/Sahilaggarwal3/An-Experimental-Social-App.git
+2. Install dependencies
+   npm install
+3. Setup environment variables
+
+Create a .env file in the root:
+
+DATABASE_URL="your_mongodb_connection_string"
+
+NEXTAUTH_SECRET="your_generated_secret"
+
+👉 Generate secret:
+
+openssl rand -base64 32 4. Generate Prisma Client
+npx prisma generate 5. Push database schema
+npx prisma db push 6. Run the project
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🔐 Authentication Setup (Important)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This project uses NextAuth with JWT strategy.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Make sure your config includes:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+callbacks: {
+async jwt({ token, user }) {
+if (user) {
+token.id = user.id;
+token.email = user.email;
+}
+return token;
+},
+async session({ session, token }) {
+if (session.user) {
+session.user.id = token.id;
+session.user.email = token.email;
+}
+return session;
+}
+}
+🧠 Key Learning Outcomes
+Implemented secure authentication with JWT
+Designed relational data using Prisma
+Built scalable API routes with Next.js
+Managed global state and UI responsiveness
+Debugged real-world issues (Prisma, NextAuth, sessions)
+🚀 Deployment
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+You can deploy easily on:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Vercel (recommended)
+Render / Railway
+📂 Project Structure
+/pages
+/api
+/auth
+[...nextauth].ts
+/libs
+prismadb.ts
+/components
+/hooks
+⚠️ Common Issues & Fixes
+Prisma not initializing
+npx prisma generate
+Node version error
+nvm install --lts
+Not signed in (NextAuth)
+Ensure callbacks are added
+Check session includes email
 
-## Learn More
+🙌 Credits
 
-To learn more about Next.js, take a look at the following resources:
+Original tutorial by:
+👉 https://www.youtube.com/watch?v=ytkG7RT6SvU
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+📌 Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Sahil Bansal
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Full Stack Developer
+Aspiring AI Engineer

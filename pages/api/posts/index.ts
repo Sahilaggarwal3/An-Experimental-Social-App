@@ -1,59 +1,58 @@
-import serverAuth from "@/libs/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
+
+import serverAuth from "@/libs/serverAuth";
 import prisma from "@/libs/prismadb";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "GET" && req.method !== "POST") {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).end();
   }
 
   try {
-    if (req.method === "POST") {
+    
+    if (req.method === 'POST') {
       const { currentUser } = await serverAuth(req, res);
-
       const { body } = req.body;
 
       const post = await prisma.post.create({
         data: {
           body,
-          userId: currentUser.id,
-        },
+          userId: currentUser.id
+        }
       });
+
       return res.status(200).json(post);
     }
 
-    if (req.method === "GET") {
+    if (req.method === 'GET') {
       const { userId } = req.query;
+
+      console.log({ userId })
 
       let posts;
 
-      if (userId && typeof userId === "string") {
+      if (userId && typeof userId === 'string') {
         posts = await prisma.post.findMany({
           where: {
-            userId,
+            userId
           },
-
           include: {
-            comments: true,
             user: true,
+            comments: true
           },
-
           orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc'
           },
         });
       } else {
         posts = await prisma.post.findMany({
           include: {
-            comments: true,
             user: true,
+            comments: true
           },
           orderBy: {
-            createdAt: "desc",
-          },
+            createdAt: 'desc'
+          }
         });
       }
 

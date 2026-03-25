@@ -1,33 +1,35 @@
-import { useState, useCallback } from "react";
-import Input from "@/Components/Input";
-import useRegisterModal from "@/hooks/useRegisterModal";
-import useLoginModal from "@/hooks/useLoginModal";
-import Modal from "@/Components/Modal";
 import { signIn } from "next-auth/react";
-import toast from "react-hot-toast";
+import { useCallback, useState } from "react";
+import { toast } from "react-hot-toast";
+
+import useLoginModal from "@/hooks/useLoginModal";
+import useRegisterModal from "@/hooks/useRegisterModal";
+
+import Input from "../Input";
+import Modal from "../Modal";
 
 const LoginModal = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      await signIn("credentials", {
+      await signIn('credentials', {
         email,
         password,
       });
 
-      toast.success("Logged in");
+      toast.success('Logged in');
 
       loginModal.onClose();
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong');
     } finally {
       setIsLoading(false);
     }
@@ -36,51 +38,40 @@ const LoginModal = () => {
   const onToggle = useCallback(() => {
     loginModal.onClose();
     registerModal.onOpen();
-  }, [loginModal, registerModal]);
-
-  const keyHandler = (event: any) => {
-    event.preventDefault();
-    if (event.key === "Enter") {
-      onSubmit();
-    }
-  };
+  }, [loginModal, registerModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Input
+      <Input 
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
-        disabled={isLoading}
+        disabled={isLoading}  
       />
-      <Input
+      <Input 
         placeholder="Password"
         type="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        disabled={isLoading}
+        disabled={isLoading} 
       />
     </div>
-  );
+  )
 
   const footerContent = (
-    <div className="text-white text-center mt-4">
-      <p>
-        First time user?
-        <span
-          onClick={onToggle}
+    <div className="text-neutral-400 text-center mt-4">
+      <p>First time using Twitter?
+        <span 
+          onClick={onToggle} 
           className="
-            text-white
+            text-white 
             cursor-pointer 
             hover:underline
           "
-        >
-          {" "}
-          Create an account
-        </span>
+          > Create an account</span>
       </p>
     </div>
-  );
+  )
 
   return (
     <Modal
@@ -92,9 +83,8 @@ const LoginModal = () => {
       onSubmit={onSubmit}
       body={bodyContent}
       footer={footerContent}
-      onKeyUp={keyHandler}
     />
   );
-};
+}
 
 export default LoginModal;
